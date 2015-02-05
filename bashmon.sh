@@ -12,13 +12,24 @@ refresh_status() {
     for job in $job_list; do
         tput setaf 7
         toilet -f standard -t $job
-        tput setaf 2
+        local build_status=""
 
         if [ "$username" ]; then
-            curl -s -u "$username:$password" "$base_url/job/$job/$query" | grep result | awk '{print $3}' | sed 's/[",]//g' | toilet -t -f mini
+            build_status="$(curl -s -u "$username:$password" "$base_url/job/$job/$query" | grep result | awk '{print $3}' | sed 's/[",]//g')"
         else
-            curl -s "$base_url/job/$job/$query" | grep result | awk '{print $3}' | sed 's/[",]//g' | toilet -t -f mini
+            build_status="$(curl -s "$base_url/job/$job/$query" | grep result | awk '{print $3}' | sed 's/[",]//g')"
         fi 
+
+        if [ "$build_status" == "SUCCESS" ]; then
+            tput setaf 2
+            toilet -t -f mini "SUCCESS"       
+        elif [ "$build_status" == "FAILURE" ]; then
+            tput setaf 1
+            toilet -t -f mini "FAILURE"       
+        else
+            tput setaf 3
+            toilet -t -f mini "BUILDING"       
+        fi
 
         echo 
     done
