@@ -11,7 +11,6 @@ refresh_status() {
     
     for job in $job_list; do
         tput setaf 7
-        toilet -f standard -t $job
         local build_status=""
 
         if [ "$username" ]; then
@@ -22,14 +21,13 @@ refresh_status() {
 
         if [ "$build_status" == "SUCCESS" ]; then
             tput setaf 2
-            toilet -t -f mini "SUCCESS"       
         elif [ "$build_status" == "FAILURE" ]; then
             tput setaf 1
-            toilet -t -f mini "FAILURE"       
         else
             tput setaf 3
-            toilet -t -f mini "BUILDING"       
         fi
+
+        toilet -f banner -t $job
 
         echo 
     done
