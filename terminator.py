@@ -1,12 +1,15 @@
 import urllib.request
 import json
+import time
+import datetime
+import os
 
-baseUrl = "http://localhost:9090"
-jobList = ["adarshr-build-war", "adarshr-publish-war"]
-
+base_url = "http://localhost:9090"
+job_list = ["adarshr-build-war", "adarshr-publish-war"]
+recheck_interval = 10
 
 def job_url(job_name):
-    return baseUrl + "/job/" + job_name + "/lastBuild/api/json?tree=result,building,duration,estimatedDuration"
+    return base_url + "/job/" + job_name + "/lastBuild/api/json?tree=result,building,duration,timestamp"
 
 
 def get_json(job_name):
@@ -16,8 +19,31 @@ def get_json(job_name):
     jsonString = response.read().decode(response.headers.get_content_charset())
     return json.loads(jsonString)
 
+"""
+  "building" : false,
+  "description" : null,
+  "duration" : 164875,
+  "estimatedDuration" : 201745,
+  "executor" : null,
+  "fullDisplayName" : "adarshr-build-war #61",
+  "id" : "2015-01-15_20-06-04",
+  "keepLog" : false,
+  "number" : 61,
+  "result" : "SUCCESS",
+  "timestamp" : 1421352364000,
+"""
 
-for job in jobList:
-    json_object = get_json(job)
-    print(json_object['result'])
+
+while True:
+    for job in job_list:
+        json_object = get_json(job)
+        result_ = json_object["result"]
+        built_on = datetime.datetime.fromtimestamp(json_object["timestamp"] / 1000).strftime('%Y-%m-%d %H:%M:%S')
+        print("Job name: %s, Result %s, Built on %s" %(job, result_, built_on))
+
+    time.sleep(recheck_interval)
+    os.system("cls")
+
+
+
 
