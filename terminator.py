@@ -1,3 +1,4 @@
+import base64
 import urllib.request
 import json
 import time
@@ -10,10 +11,11 @@ from pyfiglet import Figlet
 base_url = None
 job_list = []
 polling_interval = 10
-
+username = None
+password = None
 
 def parse_arguments():
-    global base_url, job_list, polling_interval
+    global base_url, job_list, polling_interval, username, password
 
     parser = argparse.ArgumentParser(description='An extremely lightweight terminal based Jenkins build monitor')
 
@@ -31,6 +33,10 @@ def parse_arguments():
     if args.interval:
         polling_interval = args.interval
 
+    if args.username:
+        username = args.username
+        password = args.password
+
 
 def job_url(job):
     return "%s/job/%s/lastBuild/api/json?tree=result,building,duration,timestamp" %(base_url, job)
@@ -38,9 +44,17 @@ def job_url(job):
 
 def parse_json(job):
     request = urllib.request.Request(job_url(job))
+    add_auth_header(request)
     response = urllib.request.urlopen(request)
     json_string = response.read().decode(response.headers.get_content_charset())
     return json.loads(json_string)
+
+
+def add_auth_header(request):
+    if username:
+        base64_bytes = base64.encodebytes(bytes('%s:%s' % (username, password), 'utf-8'))[:-1]
+        base64_string = str(base64_bytes, 'utf-8')
+        request.add_header('Authorization', 'Basic %s' %(base64_string))
 
 
 def refresh_loop():
