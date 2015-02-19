@@ -4,7 +4,9 @@ import json
 import time
 import datetime
 import os
+import re
 import argparse
+import ago
 from termcolor import colored
 from pyfiglet import Figlet
 
@@ -21,9 +23,9 @@ def parse_arguments():
 
     parser.add_argument('base_url', help='Jenkins base URL without the trailing slash')
     parser.add_argument('job_list', help='comma-separated list of Jenkins jobs that needs monitoring')
-    parser.add_argument('--interval', help='polling interval in seconds', type=int)
-    parser.add_argument('--username', help='username if Jenkins needs authentication')
-    parser.add_argument('--password', help='password if Jenkins needs authentication')
+    parser.add_argument('--interval', metavar='seconds', help='polling interval in seconds', type=int)
+    parser.add_argument('--username', metavar='u', help='username if Jenkins needs authentication')
+    parser.add_argument('--password', metavar='p', help='password if Jenkins needs authentication')
 
     args = parser.parse_args()
 
@@ -57,20 +59,59 @@ def add_auth_header(request):
         request.add_header('Authorization', 'Basic %s' %(base64_string))
 
 
+"""
+asc_____
+banner
+charact2
+clb8x8
+clb8x10
+clr6x6
+computer
+cybermedium
+cyberlarge
+doom
+puffy
+sansb
+standard
+straight
+thick
+"""
+
+
 def refresh_loop():
     while True:
         for job in job_list:
             json_object = parse_json(job)
             success = json_object["result"] == 'SUCCESS'
-            built_on = datetime.datetime.fromtimestamp(json_object["timestamp"] / 1000).strftime('%Y-%m-%d %H:%M:%S')
-            # print("Job name: %s, Result %s, Built on %s" % (job, result, built_on))
-            # print(colored('hello', 'red'), colored('world', 'green'))
-            figlet = Figlet(font='banner')
+            building = json_object["building"] == True
+            duration = json_object["duration"]
+            built_on = datetime.datetime.fromtimestamp(json_object["timestamp"] / 1000) #.strftime('%d-%m-%Y %H:%M:%S')
+            term_width = os.get_terminal_size().columns
+            figlet = Figlet(font='cybermedium', width=term_width)
+
+            text = figlet.renderText(job)
+
+            padding_length = int((term_width - len(text) / 4) / 2)
+            padding = ' ' * padding_length
+
+            text = re.sub('\n', padding + '\n' + padding, text)
+            text = padding + text
+            text = text[:-(padding_length + 1)]
+            # text = re.sub('', padding, text)
+
+            # text = padding + text + padding
 
             if success:
-                print(colored(figlet.renderText(job), 'white', 'on_green'))
+                print(colored(text, color='white', on_color='on_green', attrs=['bold']), end='\r')
+                print(colored(('Last build: %s, Took: %s' %(
+                    ago.human(built_on),
+                    ago.human(datetime.timedelta(milliseconds=duration), precision=1, past_tense='{}', future_tense='{}'))
+                ).center(term_width), 'grey', 'on_green'))
+
+            elif building:
+                print(colored(text, 'grey', 'on_yellow'))
             else:
-                print(colored(figlet.renderText(job), 'white', 'on_red'))
+                print(colored(text, 'grey', 'on_red'))
 
             print('\n')
 
