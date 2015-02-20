@@ -6,7 +6,7 @@ import datetime
 import os
 import re
 import argparse
-import ago
+from ago import human
 from termcolor import colored
 from pyfiglet import Figlet
 
@@ -30,7 +30,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     base_url = args.base_url
-    job_list = args.job_list.split(',')
+    job_list = args.job_list.split()
 
     if args.interval:
         polling_interval = args.interval
@@ -77,6 +77,19 @@ straight
 thick
 """
 
+def format_job_name(job, success, building, duration, built_on):
+    term_width = os.get_terminal_size().columns
+    figlet = Figlet(font='cybermedium', width=term_width, justify='center')
+
+    figlet_text = figlet.renderText(text=job)
+
+    formatted_text = ''
+    for line in figlet_text.splitlines():
+        line = line.ljust(term_width)
+        formatted_text = formatted_text + line + '\n'
+
+    return formatted_text[:-1]
+
 
 def refresh_loop():
     while True:
@@ -85,33 +98,31 @@ def refresh_loop():
             success = json_object["result"] == 'SUCCESS'
             building = json_object["building"] == True
             duration = json_object["duration"]
-            built_on = datetime.datetime.fromtimestamp(json_object["timestamp"] / 1000) #.strftime('%d-%m-%Y %H:%M:%S')
+            built_on = datetime.datetime.fromtimestamp(json_object["timestamp"] / 1000)
+
+            formatted_job_name = format_job_name(job, success, building, duration, built_on)
+
             term_width = os.get_terminal_size().columns
-            figlet = Figlet(font='cybermedium', width=term_width)
 
-            text = figlet.renderText(job)
+            duration_human = 'negligible'
+            if duration >= 1000:
+                duration_human = human(datetime.timedelta(milliseconds=duration), precision=1, past_tense='{}', future_tense='{}')
 
-            padding_length = int((term_width - len(text) / 4) / 2)
-            padding = ' ' * padding_length
-
-            text = re.sub('\n', padding + '\n' + padding, text)
-            text = padding + text
-            text = text[:-(padding_length + 1)]
-            # text = re.sub('', padding, text)
-
-            # text = padding + text + padding
+            built_on_human = human(built_on)
+            built_on_string = ('Built %s' %built_on_human).ljust(int(term_width / 2))
+            duration_string = ('Took %s' %duration_human).rjust(int(term_width / 2))
 
             if success:
-                print(colored(text, color='white', on_color='on_green', attrs=['bold']), end='\r')
-                print(colored(('Last build: %s, Took: %s' %(
-                    ago.human(built_on),
-                    ago.human(datetime.timedelta(milliseconds=duration), precision=1, past_tense='{}', future_tense='{}'))
-                ).center(term_width), 'grey', 'on_green'))
+                print(colored(formatted_job_name, color='white', on_color='on_green', attrs=['bold']))
+                print(colored(built_on_string + duration_string, 'grey', 'on_green'))
 
             elif building:
-                print(colored(text, 'grey', 'on_yellow'))
+                print(colored(formatted_job_name, 'grey', 'on_yellow'))
+                print(colored(built_on_string + duration_string, 'grey', 'on_yellow'))
+
             else:
-                print(colored(text, 'grey', 'on_red'))
+                print(colored(formatted_job_name, 'grey', 'on_red'))
+                print(colored(built_on_string + duration_string, 'grey', 'on_red'))
 
             print('\n')
 
