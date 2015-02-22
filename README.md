@@ -4,6 +4,8 @@ An extremely lightweight terminal based Jenkins build monitor written using Pyth
 
 ![Screenshot of Windows Command Prompt](docs/images/windows.png)
 
+![Screenshot of Ubuntu Terminal](docs/images/ubuntu.png)
+
 
 ## Prerequisites
 
