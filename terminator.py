@@ -13,6 +13,8 @@ def pause():
 
 def loop():
     while True:
+        clear()
+        
         for job_name in Arguments.job_list:
             response = parse_api_response(job_name)
             job = Job(job_name, response)
@@ -21,8 +23,6 @@ def loop():
             print(formatter.job_display())
 
         pause()
-        clear()
-
 
 def main():
     parse_arguments()

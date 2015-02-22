@@ -14,7 +14,7 @@ class Arguments:
     def __init__(self, args):
         Arguments.base_url = args.base_url
         Arguments.job_list = args.job_list.split()
-        Arguments.needs_authentication = args.password
+        Arguments.needs_authentication = args.password or args.username
         
         if args.interval:
             Arguments.polling_interval = args.interval
