@@ -11,18 +11,38 @@ def pause():
     time.sleep(Arguments.polling_interval)
 
 
-def loop():
-    while True:
-        clear()
-        
-        for job_name in Arguments.job_list:
-            response = parse_api_response(job_name)
-            job = Job(job_name, response)
-            formatter = Formatter(job)
+def print_jobs(jobs):
+    for job in jobs:
+        formatter = Formatter(job)
+        print(formatter.job_display())
 
-            print(formatter.job_display())
+
+def parse_jobs(jobs):
+    for job_name in Arguments.job_list:
+        response = parse_api_response(job_name)
+        job = Job(job_name, response)
+        jobs.append(job)
+
+
+def loop():
+    previous_jobs = []
+    current_jobs = []
+
+    while True:
+        if not previous_jobs:
+            clear()
+
+        parse_jobs(current_jobs)
+
+        if previous_jobs != current_jobs:
+            clear()
+            print_jobs(current_jobs)
+
+        previous_jobs = current_jobs
+        current_jobs = []
 
         pause()
+
 
 def main():
     parse_arguments()

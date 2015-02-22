@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timedelta
 
 from ago import human
@@ -8,19 +9,31 @@ class Job:
         self.name = name
         self.is_successful = response['result'] == 'SUCCESS'
         self.is_building = response['building'] == True
-        self.duration = Job.__friendly_duration(response['duration'])
-        self.built_on = Job.__friendly_built_on(response['timestamp'])
+        self.duration_millis = response['duration']
+        self.timestamp_millis = response['timestamp']
+        self.duration = self.__friendly_duration()
+        self.built_on = self.__friendly_built_on()
 
-    @staticmethod
-    def __friendly_duration(duration_millis):
-        if duration_millis < 1000:
+    def __friendly_duration(self):
+        if self.duration_millis < 1000:
             return 'negligible'
 
-        time_delta = timedelta(milliseconds=duration_millis)
+        time_delta = timedelta(milliseconds=self.duration_millis)
         return human(time_delta, precision=1, past_tense='{}', future_tense='{}')
 
-    @staticmethod
-    def __friendly_built_on(timestamp_millis):
-        timestamp = timestamp_millis / 1000
+    def __friendly_built_on(self):
+        timestamp = math.floor(self.timestamp_millis / 1000)
+
+        if datetime.now().timestamp() - timestamp < 10:
+            return 'moments ago'
+
         date = datetime.fromtimestamp(timestamp)
-        return human(date)
+
+        return human(date, precision=1)
+
+    def __eq__(self, other):
+        return (self.name == other.name
+                and self.timestamp_millis == other.timestamp_millis
+                and self.duration_millis == other.duration_millis
+                and self.is_successful == other.is_successful
+                and self.is_building == other.is_building)

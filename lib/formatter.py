@@ -38,7 +38,7 @@ class Formatter:
         return job_bar[:-1]
 
     def __job_info_strip_display(self):
-        return ('Built %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
+        return ('Started %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
                ('Took %s' % self.job.duration).rjust(math.ceil(Formatter.terminal_width / 2))
 
     def __colourise_job_display(self, job_bar, job_info_strip):
@@ -46,9 +46,9 @@ class Formatter:
         return '%s%s\n%s%s\n' % (colours[0], job_bar, colours[1], job_info_strip)
 
     def __colours(self):
-        if self.job.is_successful:
-            return Back.GREEN + Fore.WHITE, Back.GREEN + Fore.BLACK
-        elif self.job.is_building:
+        if self.job.is_building:
             return Back.YELLOW + Fore.WHITE, Back.YELLOW + Fore.BLACK
+        elif self.job.is_successful:
+            return Back.GREEN + Fore.WHITE, Back.GREEN + Fore.BLACK
         else:
             return Back.RED + Fore.WHITE, Back.RED + Fore.BLACK

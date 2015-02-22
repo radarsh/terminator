@@ -31,7 +31,7 @@ $ python terminator.py <jenkins url> "job-one job-two job-three"
 ### If your Jenkins needs authentication
 
 ```python
-$ python terminator.py <jenkins url> "job-one job-two job-three" --u USERNAME -p
+$ python terminator.py <jenkins url> "job-one job-two job-three" -u USERNAME -p
 ```
 
 ### If you don't like the default font
