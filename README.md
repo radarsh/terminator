@@ -1,18 +1,44 @@
-# bashmon
+# terminator
 
-An extremely lightweight terminal based Jenkins build monitor written using Bash.
+An extremely lightweight terminal based Jenkins build monitor written using Python.
+
+## Prerequisites
+
+- Python 3.4
+- Pip 3
+
+## Installation
+
+Install all the requirements.
+
+```bash
+$ cd terminator
+$ pip install -r requirements
+```
+
+You might need elevated privileges to install some requirements.
+
+```bash
+$ sudo pip install -r requirements
+```
 
 ## Usage
 
-```bash
-$ ./bashmon.sh -b jenkinsurl -j "job-one job-two job-three"
+```python
+$ python terminator.py <jenkins url> "job-one job-two job-three"
 ```
 
 ### If your Jenkins needs authentication
 
-```bash
-$ ./bashmon.sh -u username -p password -b jenkinsurl -j "job-one job-two job-three"
+```python
+$ python terminator.py <jenkins url> "job-one job-two job-three" --u username -p
 ```
 
+### If you don't like the default font
 
+```python
+$ python terminator.py <jenkins url> "job-one job-two job-three" --font <font name>
+```
 
+Where `<font name>` comes from [pyfiglet](https://github.com/pwaller/pyfiglet/tree/master/pyfiglet/fonts). Just make
+sure that you choose a font that does not break your terminal width.
