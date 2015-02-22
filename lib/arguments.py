@@ -28,7 +28,7 @@ class Arguments:
 
     @staticmethod
     def job_url(job_name):
-        return "%s/job/%s/lastBuild/api/json?tree=result,building,duration,timestamp" % (Arguments.base_url, job_name)
+        return "%s/job/%s/lastBuild/api/json?tree=result,building,duration,timestamp,estimatedDuration" % (Arguments.base_url, job_name)
     
     @staticmethod
     def authorization_header():

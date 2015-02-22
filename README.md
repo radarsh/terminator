@@ -2,6 +2,9 @@
 
 An extremely lightweight terminal based Jenkins build monitor written using Python.
 
+![Screenshot of Windows Command Prompt](docs/images/windows.png)
+
+
 ## Prerequisites
 
 - Python 3.4
