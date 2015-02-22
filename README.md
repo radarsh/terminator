@@ -31,14 +31,14 @@ $ python terminator.py <jenkins url> "job-one job-two job-three"
 ### If your Jenkins needs authentication
 
 ```python
-$ python terminator.py <jenkins url> "job-one job-two job-three" --u username -p
+$ python terminator.py <jenkins url> "job-one job-two job-three" --u USERNAME -p
 ```
 
 ### If you don't like the default font
 
 ```python
-$ python terminator.py <jenkins url> "job-one job-two job-three" --font <font name>
+$ python terminator.py <jenkins url> "job-one job-two job-three" -f FONT
 ```
 
-Where `<font name>` comes from [pyfiglet](https://github.com/pwaller/pyfiglet/tree/master/pyfiglet/fonts). Just make
-sure that you choose a font that does not break your terminal width.
+`FONT` can be one of the [pyfiglet fonts](https://github.com/pwaller/pyfiglet/tree/master/pyfiglet/fonts). Just make
+sure that the font you choose does not break your terminal width.
