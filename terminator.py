@@ -19,9 +19,13 @@ def print_jobs(jobs):
 
 def parse_jobs(jobs):
     for job_name in Arguments.job_list:
-        response = parse_api_response(job_name)
-        job = Job(job_name, response)
-        jobs.append(job)
+        try:
+            response = parse_api_response(job_name)
+            job = Job(job_name, response)
+            jobs.append(job)
+        except Exception as e:
+            print(e)
+            pass
 
 
 def loop():

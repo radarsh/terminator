@@ -51,8 +51,8 @@ class Formatter:
 
     def __colours(self):
         if self.job.is_building:
-            return Back.YELLOW + Fore.WHITE, Back.YELLOW + Fore.BLACK
+            return Back.YELLOW + Fore.BLACK, Back.YELLOW + Fore.BLACK
         elif self.job.is_successful:
-            return Back.GREEN + Fore.WHITE, Back.GREEN + Fore.BLACK
+            return Back.GREEN + Fore.BLACK, Back.GREEN + Fore.BLACK
         else:
-            return Back.RED + Fore.WHITE, Back.RED + Fore.BLACK
+            return Back.RED + Fore.BLACK, Back.RED + Fore.BLACK
