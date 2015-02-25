@@ -1,10 +1,10 @@
 import math
 
-from colorama import Back, Fore, init
+from colorama import Back, Fore, Style, init
 from pyfiglet import Figlet
 
-from lib.arguments import Arguments
-from lib.terminal import term_width
+from terminator.arguments import Arguments
+from terminator.terminal import term_width
 
 
 class Formatter:
@@ -53,6 +53,6 @@ class Formatter:
         if self.job.is_building:
             return Back.YELLOW + Fore.BLACK, Back.YELLOW + Fore.BLACK
         elif self.job.is_successful:
-            return Back.GREEN + Fore.BLACK, Back.GREEN + Fore.BLACK
+            return Back.GREEN + Fore.WHITE + Style.BRIGHT, Back.GREEN + Fore.BLACK + Style.DIM
         else:
             return Back.RED + Fore.BLACK, Back.RED + Fore.BLACK

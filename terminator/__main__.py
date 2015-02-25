@@ -1,10 +1,9 @@
 import time
 
-from lib.jenkins import parse_api_response
-from lib.arguments import Arguments
-from lib.terminal import parse_arguments, clear
-from lib.formatter import Formatter
-from lib.job import Job
+from terminator.jenkins import get_job
+from terminator.arguments import Arguments
+from terminator.terminal import parse_arguments, clear
+from terminator.formatter import Formatter
 
 
 def pause():
@@ -20,8 +19,7 @@ def print_jobs(jobs):
 def parse_jobs(jobs):
     for job_name in Arguments.job_list:
         try:
-            response = parse_api_response(job_name)
-            job = Job(job_name, response)
+            job = get_job(job_name)
             jobs.append(job)
         except Exception as e:
             print(e)

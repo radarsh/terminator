@@ -2,7 +2,7 @@ import argparse
 import os
 from platform import system
 
-from lib.arguments import Arguments
+from terminator.arguments import Arguments
 
 
 def term_width():
