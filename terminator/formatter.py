@@ -3,8 +3,8 @@ import math
 from colorama import Back, Fore, Style, init
 from pyfiglet import Figlet
 
-from terminator.arguments import Arguments
-from terminator.terminal import term_width
+from terminator.arguments import *
+from terminator.display import term_width
 
 
 class Formatter:
@@ -14,20 +14,20 @@ class Formatter:
 
     def __init__(self, job):
         self.job = job
-        Formatter.__init_formatter()
+        Formatter._init_formatter()
 
     @classmethod
-    def __init_formatter(cls):
+    def _init_formatter(cls):
         cls.terminal_width = term_width()
-        cls.figlet = Figlet(font=Arguments.font, width=Formatter.terminal_width, justify='center')
+        cls.figlet = Figlet(font=font, width=Formatter.terminal_width, justify='center')
 
     def job_display(self):
-        job_bar = self.__job_bar_display()
-        job_info_strip = self.__job_info_strip_display()
+        job_bar = self._job_bar_display()
+        job_info_strip = self._job_info_strip_display()
 
-        return self.__colourise_job_display(job_bar, job_info_strip)
+        return self._colourise_job_display(job_bar, job_info_strip)
 
-    def __job_bar_display(self):
+    def _job_bar_display(self):
         rendered_text = Formatter.figlet.renderText(text=self.job.name)
 
         job_bar = ''
@@ -37,7 +37,7 @@ class Formatter:
 
         return job_bar[:-1]
 
-    def __job_info_strip_display(self):
+    def _job_info_strip_display(self):
         if self.job.is_building:
             return ('Started %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
                ('Estimated %s' % self.job.estimated_duration).rjust(math.ceil(Formatter.terminal_width / 2))
@@ -45,11 +45,11 @@ class Formatter:
             return ('Started %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
                    ('Took %s' % self.job.duration).rjust(math.ceil(Formatter.terminal_width / 2))
 
-    def __colourise_job_display(self, job_bar, job_info_strip):
-        colours = self.__colours()
+    def _colourise_job_display(self, job_bar, job_info_strip):
+        colours = self._colours()
         return '%s%s\n%s%s\n' % (colours[0], job_bar, colours[1], job_info_strip)
 
-    def __colours(self):
+    def _colours(self):
         if self.job.is_building:
             return Back.YELLOW + Fore.BLACK, Back.YELLOW + Fore.BLACK
         elif self.job.is_successful:

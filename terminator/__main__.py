@@ -1,47 +1,27 @@
 import time
 
-from terminator.jenkins import get_job
-from terminator.arguments import Arguments
-from terminator.terminal import parse_arguments, clear
-from terminator.formatter import Formatter
+from terminator.jenkins import parse_jobs
+from terminator.arguments import *
+from terminator.display import clear_screen, repaint
 
 
 def pause():
-    time.sleep(Arguments.polling_interval)
-
-
-def print_jobs(jobs):
-    for job in jobs:
-        formatter = Formatter(job)
-        print(formatter.job_display())
-
-
-def parse_jobs(jobs):
-    for job_name in Arguments.job_list:
-        try:
-            job = get_job(job_name)
-            jobs.append(job)
-        except Exception as e:
-            print(e)
-            pass
+    time.sleep(polling_interval)
 
 
 def loop():
     previous_jobs = []
-    current_jobs = []
 
     while True:
         if not previous_jobs:
-            clear()
+            clear_screen()
 
-        parse_jobs(current_jobs)
+        current_jobs = parse_jobs()
 
         if previous_jobs != current_jobs:
-            clear()
-            print_jobs(current_jobs)
+            repaint(current_jobs)
 
         previous_jobs = current_jobs
-        current_jobs = []
 
         pause()
 
