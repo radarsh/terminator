@@ -51,6 +51,6 @@ class Formatter:
         if self.job.is_building:
             return Back.YELLOW + Fore.BLACK + Style.DIM, Back.YELLOW + Fore.BLACK + Style.DIM
         elif self.job.is_successful:
-            return Back.GREEN + Fore.WHITE + Style.BRIGHT, Back.GREEN + Fore.BLACK + Style.DIM
+            return Back.GREEN + Fore.BLACK + Style.DIM, Back.GREEN + Fore.BLACK + Style.DIM
         else:
             return Back.RED + Fore.WHITE + Style.BRIGHT, Back.RED + Fore.BLACK + Style.DIM
