@@ -1,10 +1,12 @@
 import os
 from platform import system
-from terminator.formatter import Formatter
+
+import terminator.formatter as formatter
+import terminator.arguments as arguments
 
 
 def term_width():
-    return os.get_terminal_size().columns
+    return arguments.terminal_width or os.get_terminal_size().columns
 
 
 def clear_screen():
@@ -17,5 +19,5 @@ def clear_screen():
 def repaint(jobs):
     clear_screen()
     for job in jobs:
-        formatter = Formatter(job)
-        print(formatter.job_display())
+        _formatter = formatter.Formatter(job)
+        print(_formatter.job_display())

@@ -22,7 +22,7 @@ class Job:
 
         time_delta = timedelta(milliseconds=self.duration_millis)
         return human(time_delta, precision=1, past_tense='{}', future_tense='{}')
-    
+
     def _friendly_estimated_duration(self):
         time_delta = timedelta(milliseconds=self.estimated_duration_millis)
         return human(time_delta, precision=1, past_tense='{}', future_tense='{}')

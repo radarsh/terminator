@@ -3,23 +3,18 @@ import math
 from colorama import Back, Fore, Style, init
 from pyfiglet import Figlet
 
-from terminator.arguments import *
-from terminator.display import term_width
+import terminator.display
+import terminator.arguments as arguments
 
 
 class Formatter:
     figlet = None
     init(autoreset=True)
-    terminal_width = -1
 
     def __init__(self, job):
         self.job = job
-        Formatter._init_formatter()
-
-    @classmethod
-    def _init_formatter(cls):
-        cls.terminal_width = term_width()
-        cls.figlet = Figlet(font=font, width=Formatter.terminal_width, justify='center')
+        self.term_width = terminator.display.term_width() # TODO I don't know why display needs to be qualified
+        Formatter.figlet = Figlet(font=arguments.font, width=self.term_width, justify='center')
 
     def job_display(self):
         job_bar = self._job_bar_display()
@@ -32,18 +27,21 @@ class Formatter:
 
         job_bar = ''
         for line in rendered_text.splitlines():
-            line = line.ljust(Formatter.terminal_width)
+            line = line.ljust(self.term_width)
             job_bar = job_bar + line + '\n'
 
         return job_bar[:-1]
 
     def _job_info_strip_display(self):
+        left_width = math.floor(self.term_width / 2)
+        right_width = math.ceil(self.term_width / 2)
+
         if self.job.is_building:
-            return ('Started %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
-               ('Estimated %s' % self.job.estimated_duration).rjust(math.ceil(Formatter.terminal_width / 2))
+            return ('Started %s' % self.job.built_on).ljust(left_width) + \
+                   ('Estimated %s' % self.job.estimated_duration).rjust(right_width)
         else:
-            return ('Started %s' % self.job.built_on).ljust(math.floor(Formatter.terminal_width / 2)) + \
-                   ('Took %s' % self.job.duration).rjust(math.ceil(Formatter.terminal_width / 2))
+            return ('Started %s' % self.job.built_on).ljust(left_width) + \
+                   ('Took %s' % self.job.duration).rjust(right_width)
 
     def _colourise_job_display(self, job_bar, job_info_strip):
         colours = self._colours()
@@ -51,8 +49,8 @@ class Formatter:
 
     def _colours(self):
         if self.job.is_building:
-            return Back.YELLOW + Fore.BLACK, Back.YELLOW + Fore.BLACK
+            return Back.YELLOW + Fore.BLACK + Style.DIM, Back.YELLOW + Fore.BLACK + Style.DIM
         elif self.job.is_successful:
             return Back.GREEN + Fore.WHITE + Style.BRIGHT, Back.GREEN + Fore.BLACK + Style.DIM
         else:
-            return Back.RED + Fore.BLACK, Back.RED + Fore.BLACK
+            return Back.RED + Fore.WHITE + Style.BRIGHT, Back.RED + Fore.BLACK + Style.DIM

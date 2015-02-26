@@ -8,6 +8,7 @@ username = None
 password = None
 needs_authentication = False
 font = 'cybermedium'
+terminal_width = None
 
 
 def parse_arguments():
@@ -20,6 +21,7 @@ def parse_arguments():
     parser.add_argument('-u', metavar='USERNAME', dest='username', help='username if Jenkins needs authentication')
     parser.add_argument('-p', dest='password', action='store_true', help='prompt for password')
     parser.add_argument('-f', metavar='FONT', dest='font', help='font used for rendering the job name')
+    parser.add_argument('-w', metavar='WIDTH', dest='terminal_width', help='terminal width override', type=int)
 
     args = parser.parse_args()
 
@@ -46,3 +48,7 @@ def _init(args):
     if args.font:
         global font
         font = args.font
+
+    if args.terminal_width:
+        global terminal_width
+        terminal_width = args.terminal_width

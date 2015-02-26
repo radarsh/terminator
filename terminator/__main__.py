@@ -1,12 +1,12 @@
 import time
 
-from terminator.jenkins import parse_jobs
-from terminator.arguments import *
-from terminator.display import clear_screen, repaint
+import terminator.display as display
+import terminator.arguments as arguments
+import terminator.jenkins as jenkins
 
 
 def pause():
-    time.sleep(polling_interval)
+    time.sleep(arguments.polling_interval)
 
 
 def loop():
@@ -14,12 +14,12 @@ def loop():
 
     while True:
         if not previous_jobs:
-            clear_screen()
+            display.clear_screen()
 
-        current_jobs = parse_jobs()
+        current_jobs = jenkins.parse_jobs()
 
         if previous_jobs != current_jobs:
-            repaint(current_jobs)
+            display.repaint(current_jobs)
 
         previous_jobs = current_jobs
 
@@ -27,7 +27,7 @@ def loop():
 
 
 def main():
-    parse_arguments()
+    arguments.parse_arguments()
     try:
         loop()
     except KeyboardInterrupt:
