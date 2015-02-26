@@ -1,6 +1,9 @@
 # terminator
 
-An extremely lightweight terminal based Jenkins build monitor written using Python.
+An extremely lightweight terminal based Jenkins build monitor written using Python. Terminator is designed to be run on
+low powered computers such as Raspberry Pi. Often it is more efficient and practical to use a terminal based build 
+monitor than running a full fledged browser such as Epiphany or Firefox.
+
 
 ### Linux Terminal
 
@@ -13,7 +16,7 @@ An extremely lightweight terminal based Jenkins build monitor written using Pyth
 
 ## Prerequisites
 
-- Python 3.4
+- Python 3.2 (but 3.4 is recommended)
 - Pip 3
 
 ## Installation
@@ -22,12 +25,6 @@ Install all the requirements.
 
 ```bash
 $ cd terminator
-$ pip install -r requirements.txt
-```
-
-You might need elevated privileges to install some requirements.
-
-```bash
 $ sudo pip install -r requirements.txt
 ```
 

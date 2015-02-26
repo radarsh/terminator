@@ -8,7 +8,7 @@ class Job:
     def __init__(self, name, response):
         self.name = name
         self.is_successful = response['result'] == 'SUCCESS'
-        self.is_building = response['building'] == True
+        self.is_building = response['building'] is True
         self.duration_millis = response['duration']
         self.estimated_duration_millis = response['estimatedDuration']
         self.timestamp_millis = response['timestamp']

@@ -12,7 +12,7 @@ terminal_width = None
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(usage='%(prog)s [options] base_url job_list',
+    parser = argparse.ArgumentParser(prog='terminator', usage='%(prog)s [options] base_url job_list',
                                      description='An extremely lightweight terminal based Jenkins build monitor')
 
     parser.add_argument('base_url', help='Jenkins base URL without the trailing slash')
