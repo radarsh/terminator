@@ -28,16 +28,28 @@ $ cd terminator
 $ sudo pip install -r requirements.txt
 ```
 
-## Usage
+## Usage to output the default view
 
 ```python
-$ python -m terminator <jenkins url> "job-one job-two job-three"
+$ python -m terminator <jenkins url>
+```
+
+## To output another jenkins view
+
+```python
+$ python -m terminator <jenkins url> -v "view_name"
+```
+
+## To output a list of specific jobs
+
+```python
+$ python -m terminator <jenkins url> -j "job-1 job-2 job-3"
 ```
 
 ### To change the polling interval
 
 ```python
-$ python -m terminator <jenkins url> "job-one job-two job-three" -i INTERVAL
+$ python -m terminator <jenkins url> -i INTERVAL
 ```
 
 Here `INTERVAL` is in seconds.
@@ -46,25 +58,25 @@ Here `INTERVAL` is in seconds.
 ### If your Jenkins needs authentication
 
 ```python
-$ python -m terminator <jenkins url> "job-one job-two job-three" -u USERNAME -p
+$ python -m terminator <jenkins url> -u USERNAME -p
 ```
 
 ### If your must override terminal width
 
 ```python
-$ python -m terminator <jenkins url> "job-one job-two job-three" -w WIDTH
+$ python -m terminator <jenkins url> -w WIDTH
 ```
 
 Sometimes you might want to use `tput cols` to get the terminal width.
 
 ```python
-$ python -m terminator <jenkins url> "job-one job-two job-three" -w "$(tput cols)"
+$ python -m terminator <jenkins url> -w "$(tput cols)"
 ```
 
 ### If you don't like the default font
 
 ```python
-$ python terminator <jenkins url> "job-one job-two job-three" -f FONT
+$ python terminator <jenkins url> -f FONT
 ```
 
 `FONT` can be one of the [pyfiglet fonts](https://github.com/pwaller/pyfiglet/tree/master/pyfiglet/fonts). Just make
