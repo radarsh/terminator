@@ -81,7 +81,7 @@ $ python -m terminator <jenkins url> -w "$(tput cols)"
 #### Change the default font
 
 ```python
-$ python terminator <jenkins url> -f FONT
+$ python -m terminator <jenkins url> -f FONT
 ```
 
 `FONT` can be one of the [pyfiglet fonts](https://github.com/pwaller/pyfiglet/tree/master/pyfiglet/fonts). Just make
