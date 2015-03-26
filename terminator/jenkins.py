@@ -1,10 +1,10 @@
 import base64
 import json
-import sys
 from urllib.request import Request, urlopen
 
 import terminator.arguments as arguments
 import terminator.job as job
+
 
 def parse_jobs():
     jobs = []
@@ -60,10 +60,10 @@ def _job_url(job_name):
         arguments.base_url, job_name)
 
 def _view_url(view_name):
-    return "%s/view/%s/api/json" % (arguments.base_url, view_name)
+    return "%s/view/%s/api/json?tree=jobs[name]" % (arguments.base_url, view_name)
 
 def _default_view_url():
-    return "%s/api/json" % (arguments.base_url)
+    return "%s/api/json?tree=jobs[name]" % (arguments.base_url)
 
 def _authorization_header():
     base64_bytes = base64.encodebytes(bytes('%s:%s' % (arguments.username, arguments.password), 'utf-8'))[:-1]
