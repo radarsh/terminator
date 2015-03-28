@@ -33,7 +33,7 @@ def parse_arguments():
 def _init(args):
     global base_url
     base_url = args.base_url
-   
+
     global needs_authentication
     needs_authentication = args.password or args.username
 
@@ -44,7 +44,7 @@ def _init(args):
     if args.jobs:
         global jobs
         jobs = args.jobs.split()
-	
+
     if args.interval:
         global polling_interval
         polling_interval = args.interval

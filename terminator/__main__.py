@@ -16,7 +16,7 @@ def loop():
         if not previous_jobs:
             display.clear_screen()
 
-        current_jobs = jenkins.parse_jobs()
+        current_jobs = jenkins.get_jobs()
 
         if previous_jobs != current_jobs:
             display.repaint(current_jobs)

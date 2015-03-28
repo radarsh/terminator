@@ -6,52 +6,47 @@ import terminator.arguments as arguments
 import terminator.job as job
 
 
-def parse_jobs():
+def get_jobs():
     jobs = []
-    job_names = []
 
-    if arguments.jobs:
-        job_names = arguments.jobs
-    elif arguments.view:
-        json_object = _parse_view_response(arguments.view)
-        for job in json_object['jobs']:
-            job_names.append(job['name'])
-    else:
-        json_object = _parse_default_view_response()
-        for job in json_object['jobs']:
-            job_names.append(job['name'])
-
-    for job_name in job_names:
+    for job_name in _get_job_names():
         try:
-            job = get_job(job_name)
-            jobs.append(job)
+            _job = _get_job(job_name)
+            jobs.append(_job)
         except Exception as e:
             print(e)
             pass
     return jobs
 
 
-def get_job(job_name):
-    json_object = _parse_job_response(job_name)
+def _get_job_names():
+    if arguments.jobs:
+        return arguments.jobs
+    elif arguments.view:
+        return _get_job_names_from_view(arguments.view)
+    else:
+        return _get_job_names_from_default_view()
+
+
+def _get_job(job_name):
+    request = Request(_job_url(job_name))
+    json_object = _get_json(request)
     return job.Job(job_name, json_object)
 
 
-def _parse_job_response(job_name):
-    request = Request(_job_url(job_name))
-    return _parse_api_response(request)
-
-
-def _parse_view_response(view_name):
+def _get_job_names_from_view(view_name):
     request = Request(_view_url(view_name))
-    return _parse_api_response(request)
+    json_object = _get_json(request)
+    return [_job['name'] for _job in json_object['jobs']]
 
 
-def _parse_default_view_response():
+def _get_job_names_from_default_view():
     request = Request(_default_view_url())
-    return _parse_api_response(request)
+    json_object = _get_json(request)
+    return [_job['name'] for _job in json_object['jobs']]
 
 
-def _parse_api_response(request):
+def _get_json(request):
     if arguments.needs_authentication:
         request.add_header('Authorization', _authorization_header())
     response = urlopen(request)
@@ -69,7 +64,7 @@ def _view_url(view_name):
 
 
 def _default_view_url():
-    return "%s/api/json?tree=jobs[name]" % (arguments.base_url)
+    return "%s/api/json?tree=jobs[name]" % arguments.base_url
 
 
 def _authorization_header():
