@@ -6,20 +6,33 @@ import terminator.arguments as arguments
 import terminator.job as job
 
 
-def get_jobs():
+def refresh_jobs(current_jobs):
+
     jobs = []
 
-    for job_name in _get_job_names():
+    for current_job in current_jobs:
         try:
-            _job = _get_job(job_name)
-            jobs.append(_job)
-        except Exception as e:
-            print(e)
+            jobs.append(_get_job(current_job.name))
+        except Exception:
+            current_job.is_missing = True
+            jobs.append(current_job)
             pass
     return jobs
 
 
-def _get_job_names():
+def get_jobs(job_list):
+    jobs = []
+
+    for job_name in job_list:
+        try:
+            _job = _get_job(job_name)
+            jobs.append(_job)
+        except Exception:
+            pass
+    return jobs
+
+
+def get_job_names():
     if arguments.jobs:
         return arguments.jobs
     elif arguments.view:
