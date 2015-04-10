@@ -13,7 +13,7 @@ class Formatter:
 
     def __init__(self, job):
         self.job = job
-        self.term_width = terminator.display.term_width() # TODO I don't know why display needs to be qualified
+        self.term_width = terminator.display.term_width()  # TODO I don't know why display needs to be qualified
         Formatter.figlet = Figlet(font=arguments.font, width=self.term_width, justify='center')
 
     def job_display(self):

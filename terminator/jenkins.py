@@ -10,14 +10,15 @@ def refresh_jobs(current_jobs):
 
     jobs = []
 
-    for job in current_jobs:
+    for current_job in current_jobs:
         try:
-            jobs.append(_get_job(job.name))
-        except Exception as e:
-            job.is_missing = True
-            jobs.append(job)
+            jobs.append(_get_job(current_job.name))
+        except Exception:
+            current_job.is_missing = True
+            jobs.append(current_job)
             pass
     return jobs
+
 
 def get_jobs(job_list):
     jobs = []
@@ -26,13 +27,12 @@ def get_jobs(job_list):
         try:
             _job = _get_job(job_name)
             jobs.append(_job)
-        except Exception as e:
-            print(e)
+        except Exception:
             pass
     return jobs
 
 
-def _get_job_names():
+def get_job_names():
     if arguments.jobs:
         return arguments.jobs
     elif arguments.view:
