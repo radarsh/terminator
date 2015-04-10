@@ -48,7 +48,9 @@ class Formatter:
         return '%s%s\n%s%s\n' % (colours[0], job_bar, colours[1], job_info_strip)
 
     def _colours(self):
-        if self.job.is_building:
+        if self.job.is_missing:
+            return Back.WHITE + Fore.BLACK + Style.DIM, Back.WHITE + Fore.BLACK + Style.DIM
+        elif self.job.is_building:
             return Back.YELLOW + Fore.BLACK + Style.DIM, Back.YELLOW + Fore.BLACK + Style.DIM
         elif self.job.is_successful:
             return Back.GREEN + Fore.BLACK + Style.DIM, Back.GREEN + Fore.BLACK + Style.DIM

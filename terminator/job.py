@@ -9,6 +9,7 @@ class Job:
         self.name = name
         self.is_successful = response['result'] == 'SUCCESS'
         self.is_building = response['building'] is True
+        self.is_missing = False
         self.duration_millis = response['duration']
         self.estimated_duration_millis = response['estimatedDuration']
         self.timestamp_millis = response['timestamp']

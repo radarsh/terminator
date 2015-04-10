@@ -3,7 +3,8 @@ from getpass import getpass
 
 base_url = None
 jobs = []
-polling_interval = 10
+refresh_job_interval = 10
+refresh_view_frequency = 10
 username = None
 password = None
 needs_authentication = False
@@ -46,8 +47,8 @@ def _init(args):
         jobs = args.jobs.split()
 
     if args.interval:
-        global polling_interval
-        polling_interval = args.interval
+        global refresh_job_interval
+        refresh_job_interval = args.interval
 
     if args.username:
         global username, password
