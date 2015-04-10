@@ -6,25 +6,31 @@ import terminator.jenkins as jenkins
 
 
 def pause():
-    time.sleep(arguments.polling_interval)
+    time.sleep(arguments.refresh_job_interval)
 
 
 def loop():
-    previous_jobs = []
+    jobs = []
+    refresh_counter = 0
 
     while True:
-        if not previous_jobs:
+
+        if refresh_counter >= arguments.refresh_view_frequency:
+            job_names = jenkins._get_job_names()
+            jobs = jenkins.get_jobs(job_names)
+            refresh_counter=0
+        elif not jobs:
             display.clear_screen()
+            job_names = jenkins._get_job_names()
+            jobs = jenkins.get_jobs(job_names)
+        else:
+            jobs = jenkins.refresh_jobs(jobs)
 
-        current_jobs = jenkins.get_jobs()
+        display.repaint(jobs)
 
-        if previous_jobs != current_jobs:
-            display.repaint(current_jobs)
-
-        previous_jobs = current_jobs
+        refresh_counter+=1
 
         pause()
-
 
 def main():
     arguments.parse_arguments()
