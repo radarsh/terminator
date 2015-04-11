@@ -11,6 +11,7 @@ def pause():
 
 def loop():
     jobs = []
+    previous_jobs = []
     refresh_counter = 0
 
     while True:
@@ -26,7 +27,9 @@ def loop():
         else:
             jobs = jenkins.refresh_jobs(jobs)
 
-        display.repaint(jobs)
+        if previous_jobs != jobs:
+            display.repaint(jobs)
+            previous_jobs = jobs
 
         refresh_counter += 1
 
