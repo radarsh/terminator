@@ -31,8 +31,8 @@ class Job:
     def _friendly_built_on(self):
         timestamp = math.floor(self.timestamp_millis / 1000)
 
-        if datetime.now().timestamp() - timestamp < 10:
-            return 'moments ago'
+        if datetime.now().timestamp() - timestamp < 60:
+            return 'less than a minute ago'
 
         date = datetime.fromtimestamp(timestamp)
 
@@ -43,4 +43,5 @@ class Job:
                 and self.timestamp_millis == other.timestamp_millis
                 and self.duration_millis == other.duration_millis
                 and self.is_successful == other.is_successful
-                and self.is_building == other.is_building)
+                and self.is_building == other.is_building
+                and self.built_on == other.built_on)
