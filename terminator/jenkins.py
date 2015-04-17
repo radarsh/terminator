@@ -33,12 +33,16 @@ def get_jobs(job_list):
 
 
 def get_job_names():
-    if arguments.jobs:
-        return arguments.jobs
-    elif arguments.view:
-        return _get_job_names_from_view(arguments.view)
-    else:
-        return _get_job_names_from_default_view()
+    try:
+        if arguments.jobs:
+            return arguments.jobs
+        elif arguments.view:
+            return _get_job_names_from_view(arguments.view)
+        else:
+            return _get_job_names_from_default_view()
+    except Exception:
+        pass
+    return []
 
 
 def _get_job(job_name):
