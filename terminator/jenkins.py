@@ -7,7 +7,6 @@ import terminator.job as job
 
 
 def refresh_jobs(current_jobs):
-
     jobs = []
 
     for current_job in current_jobs:
@@ -20,10 +19,10 @@ def refresh_jobs(current_jobs):
     return jobs
 
 
-def get_jobs(job_list):
+def get_jobs(job_names):
     jobs = []
 
-    for job_name in job_list:
+    for job_name in job_names:
         try:
             _job = _get_job(job_name)
             jobs.append(_job)
